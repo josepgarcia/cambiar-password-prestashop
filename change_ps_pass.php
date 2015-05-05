@@ -1,12 +1,12 @@
 <?php
 
-/* V 0.8 */
+/* V 0.85 */
 
-$_TOKEN = '123';
+$_TOKEN = '123'; // Password para ejecutar el script
 
-$_id_employee = 122;
-$_NEW_email = FALSE; // 'admin@admin.com';
-$_NEW_passwd = '12123';
+$_id_employee = 1; // ID del empleado (1=admin), OBLIGATORIO
+$_NEW_email = ''; // Nuevo correo electrónico para el usuario, OPCIONAL
+$_NEW_passwd = ''; // Nuevo password para el empleado, OBLIGATORIO
 
 /*
  * 
@@ -55,8 +55,10 @@ try {
 
     $sql = 'UPDATE `' . _DB_PREFIX_ . 'employee` ';
     $sql .= 'SET `passwd` = MD5("' . _COOKIE_KEY_ . $_NEW_passwd . '") ';
-    if ($_NEW_email)
+
+    if (filter_var($_NEW_email, FILTER_VALIDATE_EMAIL))
         $sql .=', `email`= "' . $_NEW_email . '" ';
+
     $sql .= 'WHERE `id_employee`=' . $_id_employee;
     $stmt = $conn->prepare($sql);
     $stmt->execute();
